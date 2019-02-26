@@ -1,13 +1,23 @@
-all: build push
+VERSION = 0.0.2
+DOCKER_REPO = neeboor
+DOCKER_REGISTORY = 515884054720.dkr.ecr.ap-northeast-1.amazonaws.com
+NAME = kubernetes-fluentd-s3
 
+.PHONY: login
+login:
+	$(shell aws ecr get-login --no-include-email --region ap-northeast-1 --profile neeboor)
+
+.PHONY: build
 build:
-	docker build -t ccpgames/kubernetes-fluentd-s3:latest .
+	docker build -t $(DOCKER_REPO)/$(NAME):latest .
+	docker rmi -f $(DOCKER_REGISTORY)/$(DOCKER_REPO)/$(NAME):latest
+	docker tag $(DOCKER_REPO)/$(NAME):latest $(DOCKER_REGISTORY)/$(DOCKER_REPO)/$(NAME):latest
+	docker tag $(DOCKER_REPO)/$(NAME):latest $(DOCKER_REGISTORY)/$(DOCKER_REPO)/$(NAME):$(VERSION)
 
+.PHONY: push
 push:
-	docker push ccpgames/kubernetes-fluentd-s3:latest
+	docker push $(DOCKER_REGISTORY)/$(DOCKER_REPO)/$(NAME):latest
+	docker push $(DOCKER_REGISTORY)/$(DOCKER_REPO)/$(NAME):$(VERSION)
 
-deploy:
-	@echo 'Deleting existing deployment'
-	@kubectl delete -f kubernetes-fluentd-s3.yaml || echo 'No deployment found, carrying on'
-	@echo 'Creating new deployment'
-	@kubectl create -f kubernetes-fluentd-s3.yaml
+.PHONY: release
+release: login build push

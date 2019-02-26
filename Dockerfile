@@ -8,6 +8,7 @@ ENV PATH /home/fluent/.gem/ruby/2.3.0/bin:$PATH
 USER root
 RUN apk --no-cache --update add build-base ruby-dev && \
     gem install fluent-plugin-s3 && \
+    gem install fluent-plugin-docker && \
     rm -rf /root/.gem/ruby/2.3.0/cache/*.gem && gem sources -c && \
     apk del build-base ruby-dev && rm -rf /var/cache/apk/*
 
