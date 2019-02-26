@@ -1,8 +1,6 @@
 kubernetes-fluentd-s3
 ===
 
-[![Build Status](https://travis-ci.org/ccpgames/kubernetes-fluentd-s3.svg?branch=master)](https://travis-ci.org/ccpgames/kubernetes-fluentd-s3)
-
 A docker container designed for kubernetes, forwarding logs to AWS S3.
 
 Nodes and masters in the cluster must have permissions through IAM instance profile roles to write to the bucket.
@@ -12,13 +10,15 @@ Nodes and masters in the cluster must have permissions through IAM instance prof
 Either clone the repository and perform build:
 
 ```bash
-docker build -t ccpgames/kubernetes-fluentd-s3 .
+make build
 ```
 
-Or use the public image available from DockerHub:
+## Release
+
+Or use the public image available from Amazon ECR:
 
 ```bash
-docker pull ccpgames/kubernetes-fluentd-s3
+make release
 ```
 
 ## Usage
